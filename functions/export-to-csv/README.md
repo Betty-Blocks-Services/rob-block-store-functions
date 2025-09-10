@@ -8,7 +8,9 @@ This function can be used to export data and properties from a specific data mod
 | :-------------------------------- |:---------------|
 | Model to export records from      | Select the model from which you want to export the data. |
 | Filter                            | The filter allows you to reduce the size of the dataset that will be exported. It is also possible to use variables inside the filter. <br><br> Let's say we want to export all records of type "Account" from a model that saves all kinds of logging, and we want to make use of a variable inside the filter. The filter in this case could be: `type: { eq: "{{ type_variable }}" }`. <br> Leave this option blank if you want to export all data from a specific model. |
-| Variables                         | The variables to be used in the filter option. The key should match the variable name you have defined inside the curly brackets. From the example above, the key should be `type_variable` and as value you can select the variable. |
+| Variables in filter               | The variables to be used in the filter option. The key should match the variable name you have defined inside the curly brackets. From the example above, the key should be `type_variable` and as value you can select the variable. |
+| Sort property                     | The property used for sorting the exported data. |
+| Sort order                        | The direction in which the data is sorted (e.g., ascending or descending). |
 | Delimiter                         | Select a delimiter, in most cases this will be ",". The delimiter is used to separate the values. |
 | Model to save CSV into            | Select the model in which you want to save the exported CSV file. |
 | Property to save CSV into         | Select the file property in which you want to save the exported CSV file. The property option is dependant on the model you have selected in the option "Model to save CSV into". |
