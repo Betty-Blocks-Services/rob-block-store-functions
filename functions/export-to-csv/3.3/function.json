@@ -43,19 +43,41 @@
     },
     {
       "info": "Variables to be used in the filter option.",
-      "label": "Variables",
+      "label": "Variables in filter",
       "meta": {
         "type": "Map"
       },
       "name": "filterVariables"
     },
     {
-      "name": "sort",
-      "label": "Sort",
-      "info": "Sort based on Data API sort.",
       "meta": {
-        "type": "Text",
-        "default": ""
+        "type": "Property",
+        "model": "modelSource"
+      },
+      "configuration": {
+        "dependsOn": [
+          {
+            "option": "modelSource",
+            "action": "CLEAR"
+          }
+        ]
+      },
+      "name": "propertySort",
+      "label": "Sort property"
+    },
+    {
+      "name": "sortOrder",
+      "label": "Sort order",
+      "meta": {
+        "type": "Select",
+        "default": "ASC",
+        "validations": {
+          "required": true
+        },
+        "values": [
+          { "label": "Ascending", "value": "ASC" },
+          { "label": "Descending", "value": "DESC" }
+        ]
       }
     },
     {

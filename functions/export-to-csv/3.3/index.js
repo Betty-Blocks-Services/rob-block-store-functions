@@ -1,12 +1,12 @@
-import { ExportToCsv } from "export-to-csv";
-import { parseISO, format, parse } from "date-fns";
-import templayed from "../../utils/templayed";
-import XLSX from "../../utils/xlsx.full.min.js";
+import { ExportToCsv } from 'export-to-csv';
+import { parseISO, format, parse } from 'date-fns';
+import templayed from '../../utils/templayed';
+import XLSX from '../../utils/xlsx.full.min.js';
 
 const snakeToCamel = (str) => {
-  str = str.replace(/_[0-9]/g, (m, chr) => "!" + m);
+  str = str.replace(/_[0-9]/g, (m, chr) => '!' + m);
   str = str.replace(/[^a-zA-Z0-9!]+(.)/g, (m, chr) => chr.toUpperCase());
-  return str.replace(/[!]/g, "_");
+  return str.replace(/[!]/g, '_');
 };
 
 const camelToSnake = (str) => {
@@ -25,7 +25,7 @@ const getAllRecords = async (gqlQuery, skip, take, results) => {
     const tmpResults = Object.values(gqlQueryObject)[0]; // The all query object which contains the results and totalcount
 
     if (tmpResults.totalCount === 0) {
-      throw new Error("The generated query did not give any results.");
+      throw new Error('The generated query did not give any results.');
     }
 
     skip += take;
@@ -42,7 +42,7 @@ const getAllRecords = async (gqlQuery, skip, take, results) => {
 };
 
 const parseDotSeparatedStringToObject = (str, value) => {
-  const keys = str.split(".");
+  const keys = str.split('.');
   const obj = {};
 
   let currentObject = obj;
@@ -73,7 +73,7 @@ const convertMappingToGraphQLQuery = (arr) => {
 
 const mergeObjects = (target, source) => {
   for (const key in source) {
-    if (typeof source[key] === "object" && source[key] !== null) {
+    if (typeof source[key] === 'object' && source[key] !== null) {
       target[key] = target[key] || {};
       mergeObjects(target[key], source[key]);
     } else {
@@ -83,17 +83,17 @@ const mergeObjects = (target, source) => {
 };
 
 const generateGraphQLQuery = (obj, indent = 0) => {
-  const indentStr = " ".repeat(indent * 2);
-  let query = "{\n";
+  const indentStr = ' '.repeat(indent * 2);
+  let query = '{\n';
 
   for (const key in obj) {
     query += `${indentStr}${key}`;
 
-    if (typeof obj[key] === "object" && obj[key] !== null) {
-      query += " " + generateGraphQLQuery(obj[key], indent + 1);
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      query += ' ' + generateGraphQLQuery(obj[key], indent + 1);
     }
 
-    query += "\n";
+    query += '\n';
   }
 
   query += `${indentStr}}`;
@@ -102,18 +102,19 @@ const generateGraphQLQuery = (obj, indent = 0) => {
 };
 
 const dataExport = async ({
+  type,
   modelSource: { name: modelNameSource },
+  filter,
+  filterVariables,
+  propertySort,
+  sortOrder,
   delimiter: fieldSeparator,
   modelTarget: { name: modelNameTarget },
   propertyTarget: [{ name: propertyNameTarget }],
+  fileName,
   exportPropertyMapping,
   formatPropertyMapping,
   useBom,
-  fileName,
-  filter,
-  filterVariables,
-  sort,
-  type,
 }) => {
   const gqlPropertyNames = convertMappingToGraphQLQuery([
     ...exportPropertyMapping,
@@ -133,48 +134,47 @@ const dataExport = async ({
       (item) => item.key === exportPropKey
     )?.value;
 
-    const valueFormat = formatMapping && formatMapping.split("|");
+    const valueFormat = formatMapping && formatMapping.split('|');
 
-    return prop.split(".").reduce((result, key) => {
+    return prop.split('.').reduce((result, key) => {
       if (
         result &&
         result[key] &&
         valueFormat &&
         valueFormat[0] &&
         valueFormat[1] &&
-        typeof result[key] !== "object"
+        typeof result[key] !== 'object'
       ) {
         switch (valueFormat[0].toString().toLowerCase()) {
-          case "date":
+          case 'date':
             const dateValue =
               result[key].length === 10
-                ? parse(result[key], "yyyy-MM-dd", new Date())
+                ? parse(result[key], 'yyyy-MM-dd', new Date())
                 : parseISO(result[key]);
             return format(dateValue, valueFormat[1]);
-          case "decimal":
-          case "price":
+          case 'decimal':
+          case 'price':
             return result[key]
               .toString()
-              .replace(".", valueFormat[1].toString().trim());
+              .replace('.', valueFormat[1].toString().trim());
           default:
             return result[key];
         }
       } else if (result && result[key]) {
         return result[key];
       }
-      return "";
+      return '';
     }, obj);
   };
 
   const queryFilter =
-    filter !== "" && filter !== null
+    filter !== '' && filter !== null
       ? `where: {${templayed(filter)(variableMap)}},`
       : ``;
 
-  const sortFilter =
-    sort !== "" && sort !== null && sort !== undefined
-      ? `sort: {${sort}},`
-      : ``;
+  const sortFilter = propertySort?.[0]?.name
+    ? `sort: { field: ${propertySort[0].name}, order: ${sortOrder}},`
+    : ``;
 
   const query = `
     query {
@@ -193,11 +193,11 @@ const dataExport = async ({
       ...acc,
       ...{
         [key]:
-          value.split(".").length > 1
+          value.split('.').length > 1
             ? value
-                .split(".")
+                .split('.')
                 .map((item) => snakeToCamel(item))
-                .join(".")
+                .join('.')
             : snakeToCamel(value),
       },
     }),
@@ -214,17 +214,17 @@ const dataExport = async ({
   });
 
   try {
-    if (type == "csv") {
+    if (type == 'csv') {
       return {
         reference: await storeFile(modelNameTarget, propertyNameTarget, {
-          contentType: "text/csv",
-          extension: "csv",
+          contentType: 'text/csv',
+          extension: 'csv',
           fileName: `${fileName}`,
           fileBuffer: stringToBuffer(
             new ExportToCsv({
               fieldSeparator,
               quoteStrings: '"',
-              decimalSeparator: ".",
+              decimalSeparator: '.',
               showLabels: true,
               showTitle: false,
               useTextFile: false,
@@ -241,15 +241,15 @@ const dataExport = async ({
       return {
         reference: await storeFile(modelNameTarget, propertyNameTarget, {
           contentType:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          extension: "xlsx",
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          extension: 'xlsx',
           fileName: `${fileName}`,
-          fileBuffer: XLSX.write(wb, { bookType: "xlsx", type: "buffer" }),
+          fileBuffer: XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' }),
         }),
       };
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     throw error;
   }
 };
