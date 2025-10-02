@@ -1,0 +1,67 @@
+{
+  "description": "Get records from a sheet in iSheet",
+  "label": "All iSheet records",
+  "category": "iSheet",
+  "icon": {
+    "name": "RemoteModelIcon",
+    "color": "Orange"
+  },
+  "options": [
+    {
+      "meta": {
+        "type": "Object",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "params",
+      "label": "Params",
+      "info": "Parameters of the Data API query."
+    },
+    {
+      "meta": {
+        "type": "Text"
+      },
+      "name": "accessToken",
+      "label": "Access Token",
+      "info": "The access token for iSheet"
+    },
+    {
+      "meta": {
+        "type": "Text",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "url",
+      "label": "URL",
+      "info": "The URL of the iSheet API"
+    },
+    {
+      "name": "columnMappingRaw",
+      "label": "Column Mapping",
+      "info": "The mapping of the columns to properties in de Betty Blocks data model. KEY = the property name in the Betty Blocks data model (camelCase), VALUE = columnId in the iSheet",
+      "meta": {
+        "type": "Map",
+        "validations": {
+          "required": true
+        }
+      }
+    },
+    {
+      "meta": {
+        "type": "Output",
+        "output": {
+          "type": "Object"
+        },
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "response",
+      "label": "Response",
+      "info": "The Data API compliant query results and the total count."
+    }
+  ],
+  "yields": "NONE"
+}
