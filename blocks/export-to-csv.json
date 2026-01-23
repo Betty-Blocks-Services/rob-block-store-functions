@@ -1,5 +1,5 @@
 {
   "dependencies": ["export-to-csv", "date-fns"],
-  "functions": ["exportToCsv 3.3"],
+  "functions": ["exportToCsv 3.4"],
   "includes": ["./functions/utils"]
 }
