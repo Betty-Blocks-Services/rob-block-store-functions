@@ -1,0 +1,5 @@
+{
+  "dependencies": [],
+  "functions": ["parseUrlEncoded 1.0"],
+  "includes": []
+}

@@ -1,0 +1,46 @@
+{
+  "description": "Parse a URL-encoded (application/x-www-form-urlencoded) string into a typed object. Useful for processing webhook payloads from services like Mailgun.",
+  "label": "Parse URL Encoded",
+  "category": "Utilities",
+  "icon": {
+    "color": "Blue",
+    "name": "CodeIcon"
+  },
+  "options": [
+    {
+      "name": "encodedString",
+      "label": "URL Encoded String",
+      "info": "The raw URL-encoded string (e.g. key1=value1&key2=value2)",
+      "meta": {
+        "type": "Text",
+        "validations": {
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "schemaModel",
+      "label": "Schema Model",
+      "info": "Select a model to type the output object. The parsed keys will be mapped to properties of this model.",
+      "meta": {
+        "type": "SchemaModel"
+      }
+    },
+    {
+      "name": "result",
+      "label": "As",
+      "info": "The parsed URL-encoded data as a typed object",
+      "meta": {
+        "type": "Output",
+        "validations": {
+          "required": true
+        },
+        "output": {
+          "type": "Object",
+          "schemaModel": "schemaModel"
+        }
+      }
+    }
+  ],
+  "yields": "NONE"
+}
