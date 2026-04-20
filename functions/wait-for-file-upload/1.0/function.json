@@ -1,0 +1,23 @@
+{
+  "category": "Misc",
+  "description": "Performs GET requests to the given URL until a 200 response is received, the response body is discarded. Use this step when uploading (large) files that need to be processed immediately.",
+  "icon": {
+    "color": "Orange",
+    "name": "ClockIcon"
+  },
+  "label": "Wait For File Upload",
+  "options": [
+    {
+      "meta": {
+        "type": "Text",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "url",
+      "label": "URL",
+      "info": "The URL to poll with GET requests until it responds with HTTP 200."
+    }
+  ],
+  "yields": "NONE"
+}
