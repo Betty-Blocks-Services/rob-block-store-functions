@@ -1,0 +1,171 @@
+{
+  "description": "Sends a HTTP(S) request with optional mTLS (mutual TLS) client-certificate authentication. Paste certificates/keys directly or bind to application configuration variables.",
+  "label": "HTTP(S) with mTLS",
+  "category": "External",
+  "icon": {
+    "name": "CloudIcon",
+    "color": "Orange"
+  },
+  "options": [
+    {
+      "info": "HTTP defines a set of request methods to indicate the desired action to be performed for the given resource.",
+      "label": "Method",
+      "meta": {
+        "validations": { "required": true },
+        "default": "get",
+        "type": "Select",
+        "values": [
+          { "label": "GET", "value": "get" },
+          { "label": "POST", "value": "post" },
+          { "label": "PUT", "value": "put" },
+          { "label": "PATCH", "value": "patch" },
+          { "label": "DELETE", "value": "delete" },
+          { "label": "HEAD", "value": "head" },
+          { "label": "OPTIONS", "value": "options" }
+        ]
+      },
+      "name": "method"
+    },
+    {
+      "info": "Sometimes you may need to pass some additional information in your request, this is possible by adding variables in your header.",
+      "label": "Headers",
+      "meta": { "type": "Map" },
+      "name": "headers"
+    },
+    {
+      "info": "Enter what protocol the receiving end needs to use. mTLS only applies when HTTPS is selected.",
+      "label": "Protocol",
+      "meta": {
+        "type": "Select",
+        "default": "https",
+        "validations": { "required": true },
+        "values": [
+          { "label": "HTTP", "value": "http" },
+          { "label": "HTTPS", "value": "https" }
+        ]
+      },
+      "name": "protocol"
+    },
+    {
+      "info": "Enter the URL of the API that you want to use.",
+      "label": "Url",
+      "configuration": {
+        "placeholder": "jsonplaceholder.typicode.com/posts/{{id}}"
+      },
+      "meta": {
+        "validations": { "required": true },
+        "type": "Text"
+      },
+      "name": "url"
+    },
+    {
+      "info": "Map the values that you want to use in your url",
+      "label": "Url Parameters",
+      "meta": { "type": "Map" },
+      "name": "urlParameters"
+    },
+    {
+      "info": "Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL.",
+      "label": "Query Parameters",
+      "meta": { "type": "Map" },
+      "name": "queryParameters"
+    },
+    {
+      "info": "An optional body containing data associated with the request.",
+      "label": "Body",
+      "configuration": {
+        "placeholder": "{ \"title\": \"{{title}}\",  \"body\": \"{{body}}\" }"
+      },
+      "meta": { "type": "MultilineText" },
+      "name": "body"
+    },
+    {
+      "info": "Map the values that you want to use in your body.",
+      "label": "Body Parameters",
+      "meta": { "type": "Map" },
+      "name": "bodyParameters"
+    },
+    {
+      "info": "PEM-encoded client certificate used for mTLS authentication. Bind to an application configuration variable or a text variable containing the full certificate (including -----BEGIN CERTIFICATE----- / -----END CERTIFICATE----- lines and newlines). Leave empty to disable mTLS.",
+      "label": "Client certificate (PEM)",
+      "configuration": {
+        "placeholder": "{{ client_cert_config }}"
+      },
+      "meta": { "type": "Text" },
+      "name": "clientCert"
+    },
+    {
+      "info": "PEM-encoded private key matching the client certificate. Bind to an application configuration variable or a text variable containing the full key (including header/footer lines and newlines). Required when a client certificate is provided.",
+      "label": "Client private key (PEM)",
+      "configuration": {
+        "placeholder": "{{ client_key_config }}"
+      },
+      "meta": { "type": "Text" },
+      "name": "clientKey"
+    },
+    {
+      "info": "Optional passphrase protecting the client private key. Leave empty if the key is not encrypted.",
+      "label": "Client key passphrase",
+      "meta": { "type": "Text" },
+      "name": "passphrase"
+    },
+    {
+      "info": "Optional PEM-encoded CA certificate(s) used to verify the server's certificate (for self-signed / private CAs). Bind to a configuration variable or a text variable. Leave empty to use the system trust store.",
+      "label": "CA certificate (PEM)",
+      "configuration": {
+        "placeholder": "{{ ca_cert_config }}"
+      },
+      "meta": { "type": "Text" },
+      "name": "caCert"
+    },
+    {
+      "info": "When set to No, the server's TLS certificate is not verified. Use only for testing against self-signed endpoints when no CA certificate is available.",
+      "label": "Reject unauthorized",
+      "meta": {
+        "type": "Select",
+        "default": "true",
+        "validations": { "required": true },
+        "values": [
+          { "label": "Yes", "value": "true" },
+          { "label": "No", "value": "false" }
+        ]
+      },
+      "name": "rejectUnauthorized"
+    },
+    {
+      "info": "The schema model can be utilized to type the output of this step when it is an object or an array of objects.",
+      "meta": { "type": "SchemaModel" },
+      "name": "schemaModel",
+      "label": "Schema Model"
+    },
+    {
+      "info": "The name of the variable you want for the status code of the response.",
+      "name": "responseCode",
+      "label": "Response code as",
+      "meta": {
+        "type": "Output",
+        "output": { "type": "Number" }
+      }
+    },
+    {
+      "name": "as",
+      "label": "Response as",
+      "meta": {
+        "type": "Output",
+        "validations": { "required": true },
+        "output": {
+          "anyOf": [
+            { "type": "Text" },
+            { "type": "Object", "schemaModel": "schemaModel" },
+            {
+              "type": "Array",
+              "schemaModel": "schemaModel",
+              "dataType": "SCHEMA"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "yields": "NONE"
+}
