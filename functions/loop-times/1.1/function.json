@@ -1,0 +1,35 @@
+{
+  "description": "Loops X amount of times based on a number.",
+  "label": "Loop Times",
+  "category": "FLOW",
+  "icon": {
+    "name": "LoopIcon",
+    "color": "Blue"
+  },
+  "options": [
+    {
+      "meta": {
+        "type": "Number",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "times",
+      "label": "Times",
+      "info": "The amount of times you want to loop."
+    },
+    {
+      "meta": {
+        "type": "Output",
+        "output": {
+          "type": "Number",
+          "scoped": true
+        }
+      },
+      "name": "index",
+      "label": "Index",
+      "info": "The name for the variable under which the current iteration will be available. Starts at 0. For example, in the 1st iteration this variable holds the value 0 and in 10th iteration, this variable holds the value 9."
+    }
+  ],
+  "yields": "ALL"
+}
